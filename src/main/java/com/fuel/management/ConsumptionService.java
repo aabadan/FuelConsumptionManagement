@@ -9,22 +9,28 @@ import java.util.List;
 @Service
 public class ConsumptionService {
 
-  @Autowired private ConsumptionRepository consumptionRepository;
+    @Autowired
+    private ConsumptionRepository consumptionRepository;
 
-  @Autowired private ConsumptionEntityConverter consumptionEntityConverter;
+    @Autowired
+    private ConsumptionEntityConverter consumptionEntityConverter;
 
-  public List<ConsumptionEntity> getAllConsumptions() {
-    final List<ConsumptionEntity> consumptionEntityList = new ArrayList<>();
-    consumptionRepository.findAll().forEach(consumptionEntityList::add);
-    return consumptionEntityList;
-  }
+    public List<ConsumptionEntity> getAllConsumptions() {
+        final List<ConsumptionEntity> consumptionEntityList = new ArrayList<>();
+        consumptionRepository.findAll().forEach(consumptionEntityList::add);
+        return consumptionEntityList;
+    }
 
-  public void saveConsumption(final FuelConsumptionRegistry fuelConsumptionRegistry) {
+    public void saveConsumption(final FuelConsumptionRegistry fuelConsumptionRegistry) {
 
-    consumptionRepository.save(consumptionEntityConverter.convert(fuelConsumptionRegistry));
-  }
+        consumptionRepository.save(consumptionEntityConverter.convert(fuelConsumptionRegistry));
+    }
 
-  public List<String> getTotalConsumptionAmountSpentByMonth() {
-    return consumptionRepository.findTotalAmountSpentOnEachMonth();
-  }
+    public List<Object[]> getTotalConsumptionAmountSpentByMonth() {
+        return consumptionRepository.findTotalAmountSpentOnEachMonth();
+    }
+
+    public List<MonthlyConsumption> getTotalConsumptionAmountSpentByMonthForDriver(final String driverId) {
+        return consumptionRepository.findTotalAmountSpentOnEachMonthForDriver(driverId);
+    }
 }
