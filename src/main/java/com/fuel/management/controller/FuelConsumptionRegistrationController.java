@@ -4,32 +4,39 @@ import com.fuel.management.ConsumptionStatistic;
 import com.fuel.management.FuelConsumptionRegistry;
 import com.fuel.management.MonthlyConsumption;
 import com.fuel.management.entity.ConsumptionEntity;
+import com.fuel.management.entity.ConsumptionEntityConverter;
 import com.fuel.management.service.ConsumptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
+@Validated
 @RestController
 public class FuelConsumptionRegistrationController {
 
   @Autowired private ConsumptionService consumptionService;
 
+  @Autowired private ConsumptionEntityConverter consumptionEntityConverter;
+
   @PostMapping("/consumption")
-  public void saveConsumption(@Valid @RequestBody FuelConsumptionRegistry fuelConsumptionRegistry) {
-    consumptionService.saveConsumption(fuelConsumptionRegistry);
+  public void saveConsumption(@RequestBody @Valid FuelConsumptionRegistry fuelConsumptionRegistry) {
+    final ConsumptionEntity consumption =
+        consumptionEntityConverter.convert(fuelConsumptionRegistry);
+    consumptionService.saveConsumption(consumption);
   }
 
   @PostMapping("/consumptions")
   public void saveConsumptions(
-      @Valid @RequestBody List<FuelConsumptionRegistry> fuelConsumptionRegistries) {
-    consumptionService.saveConsumptions(fuelConsumptionRegistries);
-  }
-
-  @GetMapping("/findConsumptions")
-  public List<ConsumptionEntity> getConsumptions() {
-    return consumptionService.getAllConsumptions();
+      @RequestBody @Valid List<FuelConsumptionRegistry> fuelConsumptionRegistries) {
+    final List<ConsumptionEntity> consumptions = new ArrayList<>();
+    fuelConsumptionRegistries.forEach(
+        fuelConsumptionRegistry ->
+            consumptions.add(consumptionEntityConverter.convert(fuelConsumptionRegistry)));
+    consumptionService.saveConsumptions(consumptions);
   }
 
   @GetMapping("/totalAmountByMonth")
