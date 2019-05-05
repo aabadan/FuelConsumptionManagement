@@ -1,8 +1,6 @@
-package com.fuel.management;
+package com.fuel.management.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +13,8 @@ import java.util.Date;
 @Setter
 @Builder
 @Table(name = "CONSUMPTION")
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConsumptionEntity {
 
   @Id @GeneratedValue private long id;

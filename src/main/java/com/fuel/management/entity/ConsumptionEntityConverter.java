@@ -1,5 +1,6 @@
-package com.fuel.management;
+package com.fuel.management.entity;
 
+import com.fuel.management.FuelConsumptionRegistry;
 import org.springframework.stereotype.Component;
 
 @Component
